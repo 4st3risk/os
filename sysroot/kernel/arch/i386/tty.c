@@ -3,7 +3,7 @@
 #include<stdint.h>
 #include<string.h>
 
-#include< kernel/tty.h>
+#include <kernel/tty.h>
 
 #include "vga.h"
 
@@ -14,7 +14,7 @@ static uint16_t* const VGA_MEMORY = (uint16_t*) 0xB8000;
 static size_t terminal_row;
 static size_t terminal_column;
 static uint8_t terminal_color;
-static uint16_t terminal_buffer;
+static uint16_t* terminal_buffer;
 
 void terminal_initialize(void){
 	terminal_row = 0;
@@ -43,8 +43,8 @@ void terminal_scroll(int line){
 	char c;
 
 	for(loop = line * (VGA_WIDTH * 2) + 0xB8000; loop < VGA_WIDTH * 2; loop++){
-		c = *loop;
-		*(loop - (VGA_WIDTH * 2)) = c;
+		c = *&loop;	//TODO: have to Review
+		*(&loop - (VGA_WIDTH * 2)) = c;
 	}
 }
 
@@ -75,7 +75,7 @@ void terminal_putchar(char c){
 }
 
 void terminal_write(const char* data, size_t size){
-	for(size_t i = 0; i < sizel i++){
+	for(size_t i = 0; i < size; i++){
 		terminal_putchar(data[i]);
 	}
 }

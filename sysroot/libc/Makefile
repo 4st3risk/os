@@ -1,6 +1,6 @@
 DEFAULT_HOST!=../default-host.sh
 HOST?=DEFAULT_HOST
-HOSTARCH!=../target-tripet-to-arch.sh $(HOST)
+HOSTARCH!=../target-triplet-to-arch.sh $(HOST)
 
 CFLAGS?=-O2 -g
 CPPFLAGS?=
@@ -18,7 +18,8 @@ CPPFLAGS:=$(CPPFLAGS) -D__is_libc -Iinclude
 LIBK_CFLAGS:=$(CFLAGS)
 LIBK_CPPFLAGS:=$(CPPFLAGS) -D__is_libk
 
-ARCHDIR=arch/$(HOSTARCH)
+ARCHDIR=arch/i386
+
 
 include $(ARCHDIR)/make.config
 
@@ -46,7 +47,7 @@ OBJS=\
 $(FREEOBJS) \
 $(HOSTEDOBJS) \
 
-LIBK_OBJS+$(FREEOBJS:.o=.libk.o)
+LIBK_OBJS=$(FREEOBJS:.o=.libk.o)
 
 BINARIES=libk.a
 
@@ -79,7 +80,7 @@ install: install-headers install-libs
 
 install-headers:
 	mkdir -p $(DESTDIR)$(INCLUDEDIR)
-	cp -R --preserve=timestamps include/. $(DESTDIR)$(INCLUDEDIR)/.
+	cp -R -p include/. $(DESTDIR)$(INCLUDEDIR)/.
 
 include-libs: $(BINARIES)
 	mkdir -p $(DESTDIR)$(LIBDIR)

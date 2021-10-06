@@ -1,4 +1,4 @@
-DEFAUT_HOST!=../default-host.sh
+DEFAULT_HOST!=../default-host.sh
 HOST?=DEFAULT_HOST
 HOSTARCH!=../target-triplet-to-arch.sh $(HOST)
 
@@ -18,7 +18,7 @@ CPPFLAGS:=$(CPPFLAGS) -D__is_kernel -Iinclude
 LDFLAGS:=$(LDFLAGS)
 LIBS:=$(LIBS) -nostdlib -lk -lgcc
 
-ARCHDIR=arch//$(HOSTARCH)
+ARCHDIR=arch/i386
 
 include $(ARCHDIR)/make.config
 
@@ -33,7 +33,7 @@ KERNEL_OBJS=\
 
 OBJS=\
      $(ARCHDIR)/crti.o \
-     $(ARCHDIR)/crtdegin.o \
+     $(ARCHDIR)/crtbegin.o \
      $(KERNEL_OBJS) \
      $(ARCHDIR)/crtend.o \
      $(ARCHDIR)/crtn.o \
@@ -74,7 +74,7 @@ install: install-headers install-kernel
 	
 install-headers:
 	mkdir -p $(DESTDIR)$(INCLUDEDIR)
-	cp -R --preserve=timestamps include/. $(DESTDIR)$(INCLUDEDIR)/.
+	cp -R -p include/. $(DESTDIR)$(INCLUDEDIR)/.
 
 install-kernel: deltos.kernel
 	mkdir -p $(DESTDIR)$(BOOTDIR)

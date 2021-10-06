@@ -1,5 +1,5 @@
 #!/bin/sh
-set- e
+set -e
 . ./header.sh
 
 for(PROJECT in $PROJECTS; do
